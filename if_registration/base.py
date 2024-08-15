@@ -89,7 +89,7 @@ def string_tile_format(tilepos_yx: np.ndarray) -> str:
     return tile_string
 
 
-def extract_raw(nb: Notebook, read_dir: str, save_dir: str, use_tiles: list, use_channels: list):
+def extract_raw(nb: Notebook, read_dir: str, save_dir: str, use_tiles: list, use_channels: list, extracted_dir):
     """
     Extract images from ND2 file and save them as .tif files without any filtering
     Args:
@@ -131,6 +131,8 @@ def extract_raw(nb: Notebook, read_dir: str, save_dir: str, use_tiles: list, use
             continue
         # load raw image
         raw_path = nb.file_names.tile_unfiltered[t][nb.basic_info.anchor_round][c_dapi]
+        fName = os.path.basename(raw_path)
+        raw_path = os.path.join(extracted_dir, fName)
         image_raw = tiles_io._load_image(raw_path, nb.extract.file_type)
         # apply rotation for versions less than 0.11.0
         version = [int(i) for i in nb.extract.software_version.split('.')]
